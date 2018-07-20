@@ -1,4 +1,5 @@
 import string
+import ast
 
 def buildHashTable(handle, hashtable):
     values = dict()
@@ -41,29 +42,38 @@ def permutate(stringData):
             if (len(anastack) != 0):
                 anastack.pop()
 
-fDict = open("9dict.txt", "r")
+#fDict = open("9dict.txt", "r")
+
 hashtable = dict()
-buildHashTable(fDict, hashtable)
+#buildHashTable(fDict, hashtable)
+
+fHashTable = open("9dictHashTable.txt", "r")
+hashtable = ast.literal_eval(fHashTable.read())
+fHashTable.close()
 
 anagrams = []
 anagram = ""
 anastack = []
 
-DUT = "AGOSMRONM"
+DUT = "YCEIXTANL"
 
 dutHash = hashKey(DUT)
 listValues = hashtable[dutHash]
 
-permutate(DUT)
+#permutate(DUT)
 
 foundGram = []
 
-for anagram in anagrams:
-    if anagram.lower() in listValues:
-        if anagram not in foundGram:
-            foundGram.append(anagram)
+# for anagram in anagrams:
+#     if anagram.lower() in listValues:
+#         if anagram not in foundGram:
+#             foundGram.append(anagram)
+
+for listValue in listValues:
+    if sorted(listValue.lower()) == sorted(DUT.lower()):
+        foundGram.append(listValue.upper())
 
 for found in foundGram:
     print found
 
-fDict.close()
+#fDict.close()
