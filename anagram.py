@@ -1,79 +1,45 @@
 import string
 import ast
 
-def buildHashTable(handle, hashtable):
-    values = dict()
-    for index, letter in enumerate(string.ascii_lowercase):
-        values[letter] = index + 1
+# ==============================================
+#   Building Hash Table for fast look-up
+# ==============================================
+def buildHashTable(handle, hashtable, primedict):
     for line in handle:
-        hashval = 0
+        hashval = 1
         for char in line.strip().lower():
-            hashval+=values[char]
+            hashval *= primedict.get(char)
         key = str(hashval)
         if key in hashtable:
             hashtable[key].append(line.strip())
         else:
             hashtable[key] = [line.strip()]
-
-def hashKey(strDut):
-    values = dict()
-    for index, letter in enumerate(string.ascii_lowercase):
-        values[letter] = index + 1
-    hashval = 0
+# ==============================================
+#   Hash word into a single integer
+# ==============================================
+def hashKey(strDut, primedict):
+    hashval = 1
     for char in strDut.lower():
-        hashval += values[char]
+        hashval *= primedict.get(char)
     return str(hashval)
-
-def permutate(stringData):
-    listdata = list(stringData)
-    found = False
-    global anastack
-    global anagram
-    for i, char in enumerate(listdata):
-        if len(listdata) == 1:
-            anagram = ''.join(anastack) + char
-            anagrams.append(anagram)
-        else:
-            templist = list(listdata)
-            del templist[i]
-            anastack.append(char)
-            result = permutate(''.join(templist))
-        if i == (len(listdata) - 1):
-            if (len(anastack) != 0):
-                anastack.pop()
-
-#fDict = open("9dict.txt", "r")
-
+# ----------------------------------------------
+#   Main Program Starts
+# ----------------------------------------------
+# Load LetterPrimeMap
+fPrimeMap = open("LetterPrimeMap.txt","r")
+primeMap = ast.literal_eval(fPrimeMap.read())
+fPrimeMap.close()
+# Open dict containing all 9-letter words
+fDict = open("9dict.txt", "r")
+# Build hash table
 hashtable = dict()
-#buildHashTable(fDict, hashtable)
-
-fHashTable = open("9dictHashTable.txt", "r")
-hashtable = ast.literal_eval(fHashTable.read())
-fHashTable.close()
-
-anagrams = []
-anagram = ""
-anastack = []
-
-DUT = "YCEIXTANL"
-
-dutHash = hashKey(DUT)
-listValues = hashtable[dutHash]
-
-#permutate(DUT)
-
-foundGram = []
-
-# for anagram in anagrams:
-#     if anagram.lower() in listValues:
-#         if anagram not in foundGram:
-#             foundGram.append(anagram)
-
-for listValue in listValues:
-    if sorted(listValue.lower()) == sorted(DUT.lower()):
-        foundGram.append(listValue.upper())
-
-for found in foundGram:
-    print found
-
-#fDict.close()
+buildHashTable(fDict, hashtable, primeMap)
+fDict.close()
+# Get user input string
+testString = input("Enter 9-word anagram: ");
+testString = testString[:9] # Limit length to 9
+# Hash input string and find matching values in hash table
+dutHash = hashKey(testString, primeMap)
+listValues = hashtable.get(dutHash)
+# Print result
+print (listValues)
