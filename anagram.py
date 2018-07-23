@@ -1,4 +1,3 @@
-import string
 import ast
 
 # ==============================================
@@ -36,10 +35,13 @@ hashtable = dict()
 buildHashTable(fDict, hashtable, primeMap)
 fDict.close()
 # Get user input string
-testString = input("Enter 9-word anagram: ");
-testString = testString[:9] # Limit length to 9
-# Hash input string and find matching values in hash table
-dutHash = hashKey(testString, primeMap)
-listValues = hashtable.get(dutHash)
-# Print result
-print (listValues)
+testString = raw_input("Enter 9-word anagram: ")
+if testString.isalpha():
+    testString = testString[:9] # Limit length to 9
+    # Hash input string and find matching values in hash table
+    dutHash = hashKey(testString, primeMap)
+    listValues = hashtable.get(dutHash)
+    # Print result
+    print (listValues)
+else:
+    print ("Input is not a valid. Restart program to try again.")
